@@ -22,7 +22,7 @@ public class FileParsingTest {
     @Test
     void csvTest() throws Exception {
         try (InputStream stream = cl.getResourceAsStream("countries.csv");
-             Reader reader = new InputStreamReader(stream)) {
+            Reader reader = new InputStreamReader(stream)) {
             CSVReader csvReader = new CSVReader(reader);
             List<String[]> content = csvReader.readAll();
 
@@ -42,13 +42,13 @@ public class FileParsingTest {
 
     @Test
     void zipTest() throws Exception {
-        try (InputStream stream = cl.getResourceAsStream("DB_Theory.7z");
+        try (InputStream stream = cl.getResourceAsStream("test_archive.7z");
              ZipInputStream zis = new ZipInputStream(stream)) {
 
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
                 final String name = entry.getName();
-                Assertions.assertTrue(name.contains("DB_Theory.pdf"));
+                Assertions.assertTrue(name.contains("All_Theory.pdf"));
             }
         }
     }
