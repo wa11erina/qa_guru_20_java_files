@@ -34,9 +34,9 @@ public class WorkingWithFilesTest {
             ZipEntry entryXlsx;
             while ((entryXlsx = zis.getNextEntry()) != null) {
                 final String name = entryXlsx.getName();
+                Assertions.assertTrue(name.contains("all_pairs.xlsx"));
 
                 XLS xls = new XLS(zis);
-                Assertions.assertTrue(name.contains("all_pairs.xlsx"));
 
                 Assertions.assertEquals("Linux",
                         xls.excel.getSheetAt(0).
@@ -51,7 +51,6 @@ public class WorkingWithFilesTest {
                 Assertions.assertTrue(name.contains("countries.csv"));
 
                 Reader reader = new InputStreamReader(zis);
-
                 CSVReader csvReader = new CSVReader(reader);
                 List<String[]> content = csvReader.readAll();
 
