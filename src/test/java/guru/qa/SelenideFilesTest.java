@@ -31,8 +31,8 @@ public class SelenideFilesTest {
     void uploadFileTest() throws Exception {
 
         open("https://fineuploader.com/demos.html");
-        $("input[type='file']").uploadFromClasspath("the_light_road.jpg");
-        $(".qq-file-name").shouldHave(text("the_light_road.jpg"));
+        $("input[type='file']").uploadFromClasspath("on_the_sofa.jpg");
+        $(".qq-file-name").shouldHave(text("on_the_sofa.jpg"));
 
     }
 
@@ -56,4 +56,5 @@ public class SelenideFilesTest {
                         .getCell(4)
                         .getStringCellValue());
     }
+
 }

@@ -1,73 +1,117 @@
 package guru.qa;
 
+import com.codeborne.pdftest.PDF;
 import com.codeborne.xlstest.XLS;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.opencsv.CSVReader;
-import guru.qa.model.GlossaryModel;
+import com.opencsv.exceptions.CsvException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.InvalidArgumentException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
+import java.util.Collection;
 import java.util.List;
+import java.util.zip.InflaterInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
+
 public class WorkingWithFilesTest {
 
-    ClassLoader cl = FileParsingTest.class.getClassLoader();
-    Gson gson = new Gson();
+    ClassLoader cl = WorkingWithFilesTest.class.getClassLoader();
+
+
+    String archiveName = "test_archive.zip";
+
+
+    private ZipInputStream getStreamFromArchive(String archiveName, String filename) throws Exception {
+
+        // Open streams
+        ZipEntry entry;
+        ZipInputStream zis;
+        InputStream is = cl.getResourceAsStream(archiveName);
+        zis = new ZipInputStream(is);
+
+        // Search for the file
+        while ((entry = zis.getNextEntry()) != null) {
+
+            // If file is found, file stream returns
+            if (entry.getName().endsWith(filename)) return zis;
+
+        }
+        // If nothing suitable is found, stream closes and new Exception appears
+        is.close();
+        zis.close();
+        throw new InvalidArgumentException("ERROR: File " + filename + " was not found in the archive" + archiveName + "\n");
+    }
+
 
     @Test
-    void zipTest() throws Exception {
-        try (InputStream stream = cl.getResourceAsStream("test_archive.7z");
-             ZipInputStream zis = new ZipInputStream(stream)) {
+    void zipStreamPdfTest() throws Exception {
 
-            ZipEntry entryPdf;
-            while ((entryPdf = zis.getNextEntry()) != null) {
-                final String name = entryPdf.getName();
-                Assertions.assertTrue(name.contains("All_Theory.pdf"));
-            }
+        InputStream inputStream = getStreamFromArchive(archiveName, "All_Theory.pdf");
 
-            ZipEntry entryXlsx;
-            while ((entryXlsx = zis.getNextEntry()) != null) {
-                final String name = entryXlsx.getName();
-                Assertions.assertTrue(name.contains("all_pairs.xlsx"));
+        PDF pdf = new PDF(inputStream);
 
-                XLS xls = new XLS(zis);
+        System.out.println(pdf.numberOfPages);
 
-                Assertions.assertEquals("Linux",
-                        xls.excel.getSheetAt(0).
-                                getRow(3)
-                                .getCell(4)
-                                .getStringCellValue());
-            }
+        Assertions.assertEquals(
+                113,
+                pdf.numberOfPages
+        );
 
-            ZipEntry entryCsv;
-            while ((entryCsv = zis.getNextEntry()) != null) {
-                final String name = entryCsv.getName();
-                Assertions.assertTrue(name.contains("countries.csv"));
-
-                Reader reader = new InputStreamReader(zis);
-                CSVReader csvReader = new CSVReader(reader);
-                List<String[]> content = csvReader.readAll();
-
-                Assertions.assertEquals(4, content.size());
-
-                final String[] firstRow = content.get(0);
-                final String[] secondRow = content.get(1);
-                final String[] thirdRow = content.get(2);
-                final String[] fourthRow = content.get(3);
-
-                Assertions.assertArrayEquals(new String[] {"Country", "Capital", "Language"}, firstRow);
-                Assertions.assertArrayEquals(new String[] {"Russia", "Moscow", "Russian"}, secondRow);
-                Assertions.assertArrayEquals(new String[] {"Ukraine", "Kiev", "Ukrainian"}, thirdRow);
-                Assertions.assertArrayEquals(new String[] {"Belarus", "Minsk", "Belarusian"}, fourthRow);
-            }
-        }
-
+        inputStream.close();
     }
-}
 
+
+    @Test
+    void zipStreamXlsTest() throws Exception {
+
+        InputStream inputStream = getStreamFromArchive(archiveName, "teachers.xls");
+
+        XLS xls = new XLS(inputStream);
+
+        String value = xls.excel.getSheetAt(0).getRow(3).getCell(2).getStringCellValue();
+
+
+        Assertions.assertTrue(
+                value.startsWith("1. Суммарное количество часов планируемое на штатную по всем разделам плана")
+        );
+
+        System.out.println(value);
+
+        inputStream.close();
+    }
+
+
+    @Test
+    void zipStreamCSVTest() throws Exception {
+
+        InputStream inputStream = getStreamFromArchive(archiveName, "countries.csv");
+        InputStreamReader isr = new InputStreamReader(inputStream);
+        CSVReader csvReader = new CSVReader(isr);
+        List<String[]> content = csvReader.readAll();
+
+        Assertions.assertEquals(4, content.size());
+
+        final String[] firstRow = content.get(0);
+        final String[] secondRow = content.get(1);
+        final String[] thirdRow = content.get(2);
+        final String[] fourthRow = content.get(3);
+
+        Assertions.assertArrayEquals(new String[] {"Country", "Capital", "Language"}, firstRow);
+        Assertions.assertArrayEquals(new String[] {"Russia", "Moscow", "Russian"}, secondRow);
+        Assertions.assertArrayEquals(new String[] {"Ukraine", "Kiev", "Ukrainian"}, thirdRow);
+        Assertions.assertArrayEquals(new String[] {"Belarus", "Minsk", "Belarusian"}, fourthRow);
+
+        System.out.println(content.get(1) + " " + "is" + " " + "the best country in the world");
+
+        inputStream.close();
+    }
+
+
+}

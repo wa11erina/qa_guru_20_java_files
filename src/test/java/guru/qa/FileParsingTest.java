@@ -42,13 +42,13 @@ public class FileParsingTest {
 
     @Test
     void zipTest() throws Exception {
-        try (InputStream stream = cl.getResourceAsStream("test_archive.7z");
+        try (InputStream stream = cl.getResourceAsStream("DB_Theory.zip");
              ZipInputStream zis = new ZipInputStream(stream)) {
 
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
                 final String name = entry.getName();
-                Assertions.assertTrue(name.contains("All_Theory.pdf"));
+                Assertions.assertTrue(name.contains("DB_Theory.pdf"));
             }
         }
     }
@@ -73,9 +73,10 @@ public class FileParsingTest {
     }
 
     @Test
-    void improvedJsonTest() throws  Exception {
+    void getJsonTest() throws  Exception {
+
         try (InputStream stream = cl.getResourceAsStream("glossary.json");
-             Reader reader = new InputStreamReader(stream)) {
+            Reader reader = new InputStreamReader(stream)) {
             GlossaryModel glossary = gson.fromJson(reader, GlossaryModel.class);
 
             Assertions.assertEquals("example glossary", glossary.getTitle());

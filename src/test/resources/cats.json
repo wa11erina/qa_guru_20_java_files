@@ -1,0 +1,33 @@
+{
+  "animalType": "Cat",
+  "characteristics": [
+    {
+      "name": "Tisha",
+      "age": 13.5,
+      "color": "tabby",
+      "breed": "Metis",
+      "isAffectionate": true
+    },
+    {
+      "name": "Barsik",
+      "age": 5,
+      "color": "ginger-white",
+      "breed": "Siberian",
+      "isAffectionate": true
+    },
+    {
+      "name": "Tigra",
+      "age": 3,
+      "color": "tiger color",
+      "breed": "Bengal",
+      "isAffectionate": false
+    },
+    {
+      "name": "Musya",
+      "age": 7,
+      "color": "white",
+      "breed": "Russian",
+      "isAffectionate": true
+    }
+  ]
+}
