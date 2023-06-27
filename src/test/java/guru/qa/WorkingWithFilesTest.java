@@ -53,6 +53,7 @@ public class WorkingWithFilesTest {
     @Test
     void zipStreamPdfTest() throws Exception {
 
+
         InputStream inputStream = getStreamFromArchive(archiveName, "All_Theory.pdf");
 
         PDF pdf = new PDF(inputStream);
@@ -108,7 +109,7 @@ public class WorkingWithFilesTest {
         Assertions.assertArrayEquals(new String[] {"Ukraine", "Kiev", "Ukrainian"}, thirdRow);
         Assertions.assertArrayEquals(new String[] {"Belarus", "Minsk", "Belarusian"}, fourthRow);
 
-        System.out.println(content.get(1) + " " + "is" + " " + "the best country in the world");
+        System.out.println(content.get(1)[0] + " " + "is" + " " + "the best country in the world");
 
         inputStream.close();
     }
