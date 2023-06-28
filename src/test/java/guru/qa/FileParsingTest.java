@@ -22,7 +22,7 @@ public class FileParsingTest {
     @Test
     void csvTest() throws Exception {
         try (InputStream stream = cl.getResourceAsStream("countries.csv");
-            Reader reader = new InputStreamReader(stream)) {
+             Reader reader = new InputStreamReader(stream)) {
             CSVReader csvReader = new CSVReader(reader);
             List<String[]> content = csvReader.readAll();
 
@@ -33,10 +33,10 @@ public class FileParsingTest {
             final String[] thirdRow = content.get(2);
             final String[] fourthRow = content.get(3);
 
-            Assertions.assertArrayEquals(new String[] {"Country", "Capital", "Language"}, firstRow);
-            Assertions.assertArrayEquals(new String[] {"Russia", "Moscow", "Russian"}, secondRow);
-            Assertions.assertArrayEquals(new String[] {"Ukraine", "Kiev", "Ukrainian"}, thirdRow);
-            Assertions.assertArrayEquals(new String[] {"Belarus", "Minsk", "Belarusian"}, fourthRow);
+            Assertions.assertArrayEquals(new String[]{"Country", "Capital", "Language"}, firstRow);
+            Assertions.assertArrayEquals(new String[]{"Russia", "Moscow", "Russian"}, secondRow);
+            Assertions.assertArrayEquals(new String[]{"Ukraine", "Kiev", "Ukrainian"}, thirdRow);
+            Assertions.assertArrayEquals(new String[]{"Belarus", "Minsk", "Belarusian"}, fourthRow);
         }
     }
 
@@ -73,10 +73,10 @@ public class FileParsingTest {
     }
 
     @Test
-    void getJsonTest() throws  Exception {
+    void getJsonTest() throws Exception {
 
         try (InputStream stream = cl.getResourceAsStream("glossary.json");
-            Reader reader = new InputStreamReader(stream)) {
+             Reader reader = new InputStreamReader(stream)) {
             GlossaryModel glossary = gson.fromJson(reader, GlossaryModel.class);
 
             Assertions.assertEquals("example glossary", glossary.getTitle());

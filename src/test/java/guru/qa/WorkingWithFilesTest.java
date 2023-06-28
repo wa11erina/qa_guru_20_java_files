@@ -3,21 +3,15 @@ package guru.qa;
 import com.codeborne.pdftest.PDF;
 import com.codeborne.xlstest.XLS;
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.InvalidArgumentException;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collection;
 import java.util.List;
-import java.util.zip.InflaterInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class WorkingWithFilesTest {
@@ -79,9 +73,12 @@ public class WorkingWithFilesTest {
         String value = xls.excel.getSheetAt(0).getRow(3).getCell(2).getStringCellValue();
 
 
-        Assertions.assertTrue(
-                value.startsWith("1. Суммарное количество часов планируемое на штатную по всем разделам плана")
-        );
+        Assertions.assertEquals("1. Суммарное количество часов планируемое на штатную по всем разделам плана  должно \n" +
+                        "составлять примерно 1500 час в год.  ",
+                xls.excel.getSheetAt(0).
+                        getRow(3)
+                        .getCell(2)
+                        .getStringCellValue());
 
         System.out.println(value);
 
@@ -104,10 +101,10 @@ public class WorkingWithFilesTest {
         final String[] thirdRow = content.get(2);
         final String[] fourthRow = content.get(3);
 
-        Assertions.assertArrayEquals(new String[] {"Country", "Capital", "Language"}, firstRow);
-        Assertions.assertArrayEquals(new String[] {"Russia", "Moscow", "Russian"}, secondRow);
-        Assertions.assertArrayEquals(new String[] {"Ukraine", "Kiev", "Ukrainian"}, thirdRow);
-        Assertions.assertArrayEquals(new String[] {"Belarus", "Minsk", "Belarusian"}, fourthRow);
+        Assertions.assertArrayEquals(new String[]{"Country", "Capital", "Language"}, firstRow);
+        Assertions.assertArrayEquals(new String[]{"Russia", "Moscow", "Russian"}, secondRow);
+        Assertions.assertArrayEquals(new String[]{"Ukraine", "Kiev", "Ukrainian"}, thirdRow);
+        Assertions.assertArrayEquals(new String[]{"Belarus", "Minsk", "Belarusian"}, fourthRow);
 
         System.out.println(content.get(1)[0] + " " + "is" + " " + "the best country in the world");
 

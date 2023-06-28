@@ -2,7 +2,6 @@ package guru.qa;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.qa.model.CatsModel;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
